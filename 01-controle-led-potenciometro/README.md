@@ -28,3 +28,11 @@ Ao girar o potenciômetro, o brilho do LED muda de acordo com a leitura.
 
 ## Aprendizados
 Este projeto explora leitura analógica, controle PWM e interação entre software e componentes eletrônicos.
+
+## 🎥 Demonstração do projeto
+
+Confira o projeto funcionando na prática:
+
+▶️ [https://youtu.be/X4lEmjtZeB0](https://youtu.be/X4lEmjtZeB0)
+
+O vídeo demonstra o controle do brilho de um LED utilizando um potenciômetro, ESP32 e MicroPython.
