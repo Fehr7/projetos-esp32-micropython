@@ -1,27 +1,32 @@
-
-from machine import Pin, ADC, PWM
+import machine
 import time
 
-# Configuração do LED com PWM
-led = PWM(Pin(12))
-led.freq(1000)
+# --- Configuração do LED com PWM ---
+pin_led = machine.Pin(2)
+led_pwm = machine.PWM(pin_led)
+led_pwm.freq(1000)
 
-# Configuração do potenciômetro com ADC
-pot = ADC(Pin(35))
-pot.atten(ADC.ATTN_11DB)
-pot.width(ADC.WIDTH_12BIT)
+# --- Configuração do Potenciômetro com ADC ---
+# O potenciômetro está conectado ao pino 34 (um pino que é apenas entrada ADC)
+pot_pin = machine.Pin(34)
+# Configura o ADC com 12 bits de resolução (0-4095) e atenuação máxima
+# A atenuação permite que o pino leia a faixa completa de tensão (0-3.3V)
+adc = machine.ADC(pot_pin)
+adc.atten(machine.ADC.ATTN_11DB)
 
 print("Gire o potenciômetro para controlar o brilho do LED.")
 
 while True:
-    valor_pot = pot.read()
+    # 1. Lê o valor do potenciômetro (0 a 4095)
+    pot_valor = adc.read()
 
-    # Converte a leitura do ADC (0 a 4095)
-    # para o duty cycle do PWM (0 a 1023)
-    brilho = valor_pot // 4
+    # 2. Mapeia o valor para a escala do PWM (0 a 1023)
+    # Como 4095 / 4 = 1023.75, podemos simplesmente dividir por 4.
+    # Usamos a divisão inteira (//) para garantir um número sem casas decimais.
+    duty_cycle_valor = pot_valor // 4
 
-    led.duty(brilho)
+    # 3. Define o duty cycle do LED
+    led_pwm.duty(duty_cycle_valor)
 
-    print("Leitura:", valor_pot, "| Brilho:", brilho)
-
-    time.sleep(0.1)
+    # Pequena pausa para não sobrecarregar o processador
+    time.sleep_ms(50)
